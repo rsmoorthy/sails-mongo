@@ -1,7 +1,7 @@
 {
-  "name": "sails-mongo",
-  "version": "0.10.4",
-  "description": "Mongo DB adapter for Sails.js",
+  "name": "sails-mongo-embedded",
+  "version": "0.0.1",
+  "description": "Supports Embedded Documents for Mongo DB adapter for Sails.js",
   "main": "./lib/adapter.js",
   "scripts": {
     "test": "make test"
@@ -28,13 +28,17 @@
     {
       "name": "Ted Kulp",
       "email": "github@wishy.org"
+    },
+    {
+      "name": "Moorthy RS",
+      "email": "rsmoorthy@gmail.com"
     }
   ],
   "license": "MIT",
   "readmeFilename": "README.md",
   "repository": {
     "type": "git",
-    "url": "git://github.com/balderdashy/sails-mongo.git"
+    "url": "git://github.com/rsmoorthy/sails-mongo-embedded.git"
   },
   "dependencies": {
     "async": "~0.8.0",

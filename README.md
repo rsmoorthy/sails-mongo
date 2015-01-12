@@ -1,80 +1,78 @@
-![image_squidhome@2x.png](http://i.imgur.com/RIvu9.png)
+# MongoAdapter With Embedded document support
 
-# MongoAdapter
+Waterline adapter for MongoDB. Forked from https://github.com/balderdashy/sails-mongo
 
-Waterline adapter for MongoDB.
+Supports Embedded documents in MongoDB. For other details, see the original sails-mongo.
 
-> **Warning**
->
-> `sails-mongo` maps the logical `id` attribute to the required `_id` physical-layer mongo id.
-> In the current version of `sails-mongo`, you **should not** sort by `id`.
+As per the [Feature Request](https://github.com/balderdashy/sails-mongo/issues/44), to implement Embedded documents, the direction 
+seems to be to implement them in waterline2. It also discourages the use of "embedded" as true. This adapter implements embedded documents 
+with "embedded: true", until then. 
 
-## Installation
+## Approach
+
+The Models are kept separate, as is the current case. Obviously, only One Way Association and One-to-Many associations are supported.
+
+The user specifies "embed" property along with the "model" property, in the associatING model. In the associated model, an "embedded" 
+property (not an attribute) is specified to indicate that this model does NOT directly store the data. Other adapters are expected to 
+ignore these two properties.
+
+Consequently, the insert, update and find are achieved ONLY in the associatING model ("parent"), where the attributes of the associatED
+model ("embedded") are passed by way of "&lt;childModelName&gt;.&lt;attribute&gt;" - something similar to MongoDB support.
+
+As an additional bonus, if parameters are passed in the format "&lt;childModelName&gt;.&lt;attribute&gt;" for insert and update -- even 
+for non-embedded documents -- this adapter automatically handles, which is a very useful quirk. See the details, on how to do this.
+
+## Changes from sails-mongo
+
+### Models (One Way Association)
+
+myApp/api/models/pet.js
+
+```javascript
+module.exports = {
+	
+	attributes: {
+		name: 'STRING',
+		color: 'STRING'
+	},
+	embedded: true
+}
+```
+
+myApp/api/models/user.js
+
+```javascript
+module.exports = {
+	
+	attributes: {
+		name: 'STRING',
+		age: 'INTEGER',
+		pony: {
+			model: 'pet',
+			embed: true
+		}
+	}
+}
+```
+
+### Access (One Way Association)
+
+```javascript
+
+
+
+
+## Installation (TBD)
 
 Install from NPM.
 
 ```bash
-$ npm install sails-mongo --save
+$ npm install sails-mongo-embedded --save
 ```
 
 ## Sails Configuration
 
 Add the mongo config to the `config/adapters.js` file.
-
-### Using with Sails v0.9.x
-
-```javascript
-module.exports.adapters = {
-  'default': 'mongo',
-
-  mongo: {
-    module: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    user: 'username',
-    password: 'password',
-    database: 'your mongo db name here'
-  }
-};
-```
-
-*Note: You can also use the old `v0.8.x` syntax as well, see next section for details.*
-
-Replication/Replica Set can be setup by adding the following options to the `mongo` object,
-with your own replica details specified:
-
-```javascript
-replSet: {
-  servers: [
-    {
-      host: 'secondary1.localhost',
-      port: 27017 // Will override port from default config (optional)
-    },
-    {
-      host: 'secondary2.localhost',
-      port: 27017
-    }
-  ],
-  options: {} // See http://mongodb.github.io/node-mongodb-native/api-generated/replset.html (optional)
-}
-```
-
-*Note: Replica set configuration is optional.*
-
-### Using with Sails v0.8.x
-
-```javascript
-module.exports.adapters = {
-  'default': 'mongo',
-
-  mongo: {
-    module: 'sails-mongo',
-    url: 'mongodb://USER:PASSWORD@HOST:PORT/DB'
-  }
-};
-```
-
-Don't forget that Mongo uses the ObjectId type for ids.
 
 ## Sails.js
 
