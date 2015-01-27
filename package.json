@@ -28,17 +28,13 @@
     {
       "name": "Ted Kulp",
       "email": "github@wishy.org"
-    },
-    {
-      "name": "Moorthy RS",
-      "email": "rsmoorthy@gmail.com"
     }
   ],
   "license": "MIT",
   "readmeFilename": "README.md",
   "repository": {
     "type": "git",
-    "url": "git://github.com/rsmoorthy/sails-mongo-embedded.git"
+    "url": "git://github.com/rsmoorthy/sails-mongo.git"
   },
   "dependencies": {
     "async": "~0.8.0",
